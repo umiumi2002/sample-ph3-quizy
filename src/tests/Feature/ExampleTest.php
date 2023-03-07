@@ -7,6 +7,8 @@ use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
+    use RefreshDatabase;
+    // ↑↑↑追記
     /**
      * A basic test example.
      *
