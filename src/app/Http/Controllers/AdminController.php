@@ -8,6 +8,7 @@ use App\AdminUser;
 use App\Question;
 use App\BigQuestion;
 use App\Choice;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
@@ -42,6 +43,23 @@ class AdminController extends Controller
     }
 
     public function edit(Request $request, $id) {
+        $validate_rule = [
+            'valid' => 'required|between:0,2', 
+        ];
+        
+        // $request->validate([
+        //     'id' => [
+        //         'required',
+        //         'integer',
+        //         Rule::exists('questions', 'id')->where(function ($query) use ($request) {
+        //             $query->where('type', $request->input('type'));
+        //         }),
+        //     ],
+        //     'name0' => 'required|string|size:20',
+        //     'name1' => 'required|string|size:20',
+        //     'name2' => 'required|string|size:20',
+        //     'valid' => 'required|between:0,2',       
+        // ]);
         $choices = Question::find($id)->choices;
         foreach ($choices as $index => $choice) {
             $choice->name = $request->{'name'.$index};
@@ -52,6 +70,7 @@ class AdminController extends Controller
             }
             $choice->save();
         }
+        $this->validate($request,$validate_rule);
         return redirect('/admin');
     }
 

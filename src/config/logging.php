@@ -43,8 +43,9 @@ return [
 
         'single' => [
             'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('logs/sample.log'),
             'level' => 'debug',
+            'permission' => 0664,
         ],
 
         'daily' => [
