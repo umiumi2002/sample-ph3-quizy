@@ -42,6 +42,15 @@ class AdminController extends Controller
     }
 
     public function edit(Request $request, $id) {
+        if(!Question::find($id)){
+            return abort(404);
+        }
+        $request->validate([
+            'name0' => 'required|between:1,20',
+            'name1' => 'required|between:1,20',
+            'name2' => 'required|between:1,20',
+            'valid' => 'required|integer|between:0,2',
+        ]);
         $choices = Question::find($id)->choices;
         foreach ($choices as $index => $choice) {
             $choice->name = $request->{'name'.$index};
@@ -117,4 +126,5 @@ class AdminController extends Controller
 
         return redirect('/admin');  
     }
+
 }
