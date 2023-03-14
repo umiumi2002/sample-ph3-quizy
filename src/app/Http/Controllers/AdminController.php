@@ -43,23 +43,23 @@ class AdminController extends Controller
     }
 
     public function edit(Request $request, $id) {
+        if(!Question::find($id)){
+            return abort(404);
+        }
         $validate_rule = [
-            'valid' => 'required|between:0,2', 
+            'valid' => 'required|numeric|between:0,2', 
+            'name0' => 'required|string|size:20',
+            'name1' => 'required|string|size:20',
+            'name2' => 'required|string|size:20',
+            // 'id' => [
+            //     Rule::exists('questions')->where(function ($query) use ($request) {
+            //         $query->where([
+            //             ['id', $request->id],
+            //         ]);
+            //     })
+            // ]
         ];
         
-        // $request->validate([
-        //     'id' => [
-        //         'required',
-        //         'integer',
-        //         Rule::exists('questions', 'id')->where(function ($query) use ($request) {
-        //             $query->where('type', $request->input('type'));
-        //         }),
-        //     ],
-        //     'name0' => 'required|string|size:20',
-        //     'name1' => 'required|string|size:20',
-        //     'name2' => 'required|string|size:20',
-        //     'valid' => 'required|between:0,2',       
-        // ]);
         $choices = Question::find($id)->choices;
         foreach ($choices as $index => $choice) {
             $choice->name = $request->{'name'.$index};
@@ -70,7 +70,8 @@ class AdminController extends Controller
             }
             $choice->save();
         }
-        $this->validate($request,$validate_rule);
+        // $this->validate($request,$validate_rule);
+        $request->validate($validate_rule);
         return redirect('/admin');
     }
 
