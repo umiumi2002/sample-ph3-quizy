@@ -1,4 +1,5 @@
 name: PHPUnitの実行
+# ソースコードをGitHubにプッシュする度に58週目で追加したテストコードが動作するようにしたい
 on: [ push ]
 jobs:
   phpunit:
@@ -8,13 +9,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: '環境の起動とテスト'
-        run: | 
-          docker-compose up -d
-          while ! docker-compose exec -T db mysqladmin ping --host=127.0.0.1 --user=laravel --password=password --silent; do
-            echo "mysqlの起動を待っています"
-            sleep 1
-          done
-          cp src/.env.example src/.env
-          docker-compose exec -T app composer install
-          docker-compose exec -T app php artisan key:generate
+      - name: 'テストコードを動作させる'
+        run: 
+          command: ./vendor/bin/phpunit
+          
